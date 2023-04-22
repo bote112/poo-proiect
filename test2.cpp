@@ -1,6 +1,5 @@
 ﻿#include <iostream>
 #include <cstring>
-#include <vector>
 #include <cstdlib> // pentru system("clear")
 #include <random>
 using namespace std;
