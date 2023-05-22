@@ -67,6 +67,17 @@ public:
     }
 };
 
+class Coach {
+private:
+    std::string name;
+
+public:
+    Coach(const std::string& name) : name(name) {}
+
+    std::string getName() const {
+        return name;
+    }
+};
 
 // Clasa pentru echipa de baschet
 class Team : public StartingPlayer, public ReservePlayer {
@@ -76,6 +87,8 @@ private:
     vector<ReservePlayer*> reservePlayers; // Jucătorii rezervă
     int wins;
     int losses;
+    std::shared_ptr<Coach> coach;
+
 
 public:
     Team(string name) : Player("", 0, ""), StartingPlayer("", 0, ""), ReservePlayer("", 0, "") {
@@ -87,6 +100,10 @@ public:
     string getName() const { return name; }
     int getWins() const { return wins; }
     int getLosses() const { return losses; }
+
+    void setCoach(std::shared_ptr<Coach> coach) {
+        this->coach = coach;
+    }
 
     void addWin() { wins++; }
     void addLoss() { losses++; }
@@ -101,15 +118,15 @@ public:
     // Sortarea jucațorilor titulari după vârstă
     void sortStartingPlayersByAge() {
         sort(startingPlayers.begin(), startingPlayers.end(), [](const StartingPlayer* player1, const StartingPlayer* player2) {
-			return player1->getAge() < player2->getAge();
-		});
-	}
+            return player1->getAge() < player2->getAge();
+            });
+    }
 
     // Sortarea jucațorilor rezervă după vârstă
     void sortReservePlayersByAge() {
         sort(reservePlayers.begin(), reservePlayers.end(), [](const ReservePlayer* player1, const ReservePlayer* player2) {
-            return player1->getAge() < player2->getAge(); 
-        });
+            return player1->getAge() < player2->getAge();
+            });
     }
 
     const vector<StartingPlayer*>& getStartingPlayers() const {
@@ -135,7 +152,7 @@ public:
     void displayAllPlayers() const {
         const vector<StartingPlayer*>& startingPlayers = getStartingPlayers();
         const vector<ReservePlayer*>& reservePlayers = getReservePlayers();
-
+        cout << "Coach: " << coach->getName() << endl<<endl;
         cout << "All Players for team " << getName() << ":" << endl;
 
         for (const StartingPlayer* player : startingPlayers) {
@@ -233,7 +250,7 @@ public:
 
 
 
-    virtual void displayStats() const  = 0;
+    virtual void displayStats() const = 0;
 
 };
 
@@ -591,6 +608,7 @@ public:
 // Lista de jucători si echipe
 
 std::vector<Team*> teams;
+using CoachPtr = std::shared_ptr<Coach>;
 
 
 int main() {
@@ -686,6 +704,26 @@ int main() {
     warriors->sortStartingPlayersByAge();
     warriors->sortReservePlayersByAge();
 
+    //creare antrenori
+
+    CoachPtr lakersCoach = make_shared<Coach>("Frank Vogel");
+    lakers->setCoach(lakersCoach);
+
+    CoachPtr clippersCoach = make_shared<Coach>("Tyronn Lue");
+    clippers->setCoach(clippersCoach);
+
+    CoachPtr bucksCoach = make_shared<Coach>("Mike Budenholzer");
+    bucks->setCoach(bucksCoach);
+
+    CoachPtr netsCoach = make_shared<Coach>("Steve Nash");
+    nets->setCoach(netsCoach);
+
+    CoachPtr sixersCoach = make_shared<Coach>("Doc Rivers");
+    sixers->setCoach(sixersCoach);
+
+    CoachPtr warriorsCoach = make_shared<Coach>("Steve Kerr");
+    warriors->setCoach(warriorsCoach);
+
     // Creare turneu
     string tournamentName;
     cout << "Please provide tournament name:";
@@ -699,11 +737,11 @@ int main() {
     tournament.addTeam(warriors);
 
     teams.push_back(lakers);
-teams.push_back(clippers);
-teams.push_back(bucks);
-teams.push_back(nets);
-teams.push_back(sixers);
-teams.push_back(warriors);
+    teams.push_back(clippers);
+    teams.push_back(bucks);
+    teams.push_back(nets);
+    teams.push_back(sixers);
+    teams.push_back(warriors);
 
 
 
@@ -720,7 +758,7 @@ teams.push_back(warriors);
     game1.setScore2(score_dist(gen));
     game1.updateWinLose();
     game1.updateStats();
-   
+
     GameStats game2(bucks, nets);
     tournament.addGame(&game2);
     game2.setScore1(score_dist(gen));
@@ -735,7 +773,7 @@ teams.push_back(warriors);
     game3.setScore2(score_dist(gen));
     game3.updateWinLose();
     game3.updateStats();
-   
+
 
     GameStats game4(lakers, nets);
     tournament.addGame(&game4);
@@ -874,9 +912,9 @@ teams.push_back(warriors);
             const Game** games = tournament.getGames();
             int numGames = tournament.getNumGames();
 
-            const Game** foundGame = std::find_if(games, games + numGames, 
+            const Game** foundGame = std::find_if(games, games + numGames,
                 [&](const Game* game) {
-                return game->getTeam1()->getName() == teamName1 && game->getTeam2()->getName() == teamName2;
+                    return game->getTeam1()->getName() == teamName1 && game->getTeam2()->getName() == teamName2;
                 });
 
             if (foundGame != games + numGames) {
@@ -889,7 +927,7 @@ teams.push_back(warriors);
                 throw InvalidTeamException("Invalid team name");
             }
         }
-        
+
         // Calculam profitul
         if (choice == 5) {
             cout << "Write one of the following to see their profit: team name, tournament name: " << endl;
@@ -926,7 +964,7 @@ teams.push_back(warriors);
 
 
 
-        
+
         TeamFanClub fanClub(echipaReclama);
 
 
