@@ -8,7 +8,7 @@ Features:
     Tournament Simulation: Organize basketball tournaments, schedule games, and automatically update team standings based on game results.
     
     Game Statistics: Generate and display detailed statistics for each game, including scores, three-pointers, assists, and rebounds.
-    
+  
     Fan Club Interaction: Join fan clubs, celebrate victories, and participate in contests.
     
     Profit Calculation: Calculate and display the profit for teams and the tournament based on wins and total scores.
